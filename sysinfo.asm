@@ -11,7 +11,6 @@
 ; Run:      ./sysinfo
 ;
 ; Notes:
-;   This is a 32-bit program on an x86_64 OS. That is normal.
 ;   The uname syscall returns strings independent of program bitness.
 
 %include "functions.asm"
@@ -26,7 +25,7 @@ machine_lbl     db "machine:  ", 0
 
 SECTION .bss
 ; struct utsname is typically 65 bytes per field, 5 fields minimum.
-; We reserve extra to be safe (390 bytes covers 6 fields of 65 bytes).
+; reserve extra to be safe (390 bytes covers 6 fields of 65 bytes).
 utsbuf          resb 390
 
 SECTION .text
@@ -87,8 +86,8 @@ _start:
     call quit
 
 .uname_failed:
-    ; Minimal failure message (kept simple, avoids extra dependencies)
-    ; You can expand this later if you want more robust error output.
+    ; Failure message
+    ; Expand this if you want more robust error output.
     mov eax, 1          ; sys_write
     mov ebx, 1          ; stdout
     mov ecx, fail_msg
