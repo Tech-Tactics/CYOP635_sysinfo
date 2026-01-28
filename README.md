@@ -26,7 +26,7 @@ during enumeration phases of security assessments.
 ```bash
 nasm -f elf sysinfo.asm
 nasm -f elf functions.asm
-ld -m elf_i386 sysinfo.o functions.o -o sysinfo
+ld -m elf_i386 sysinfo.o -o sysinfo
 ./sysinfo
 
 ## Output Example
