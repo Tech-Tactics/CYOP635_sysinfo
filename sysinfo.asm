@@ -11,7 +11,7 @@
 ; Run:      ./sysinfo
 ;
 ; Notes:
-;   The uname syscall returns strings independent of program bitness.
+;   The uname syscall returns strings independent of program bitness (32 or 64).
 
 %include "functions.asm"
 
@@ -23,9 +23,13 @@ release_lbl     db "release:  ", 0
 version_lbl     db "version:  ", 0
 machine_lbl     db "machine:  ", 0
 
+fail_msg        db "uname() failed.", 0
+
 SECTION .bss
-; struct utsname is typically 65 bytes per field, 5 fields minimum.
-; reserve extra to be safe (390 bytes covers 6 fields of 65 bytes).
+; uname() writes a struct utsname into our buffer.
+; Common Linux layout: each text field is 65 bytes (64 chars + null byte).
+; Offsets assume 65-byte fields placed back-to-back.
+; This reserves extra to be safe (390 bytes covers 6 fields of 65 bytes)
 utsbuf          resb 390
 
 SECTION .text
@@ -38,6 +42,7 @@ _start:
 
     ; uname(utsbuf)
     ; syscall number (i386): 122
+    ; EBX holds the pointer to the output buffer.
     mov eax, 122
     mov ebx, utsbuf
     int 0x80
@@ -53,6 +58,10 @@ _start:
     ; version  = utsbuf + 195
     ; machine  = utsbuf + 260
     ;
+    ; Note on LEA:
+    ;   LEA computes an address without reading memory.
+    ;   Example: lea eax, [utsbuf + 65] sets EAX to the address of nodename.
+
     ; Print: sysname
     mov eax, sysname_lbl
     call sprintLF
@@ -86,15 +95,8 @@ _start:
     call quit
 
 .uname_failed:
-    ; Failure message
-    ; Expand this if you want more robust error output.
-    mov eax, 1          ; sys_write
-    mov ebx, 1          ; stdout
-    mov ecx, fail_msg
-    mov edx, fail_len
-    int 0x80
+    ; Keep the error path simple and consistent with the rest of the program.
+    ; We print a message and exit cleanly.
+    mov eax, fail_msg
+    call sprintLF
     call quit
-
-SECTION .data
-fail_msg db "uname() failed.", 0Ah, 0
-fail_len equ $-fail_msg
