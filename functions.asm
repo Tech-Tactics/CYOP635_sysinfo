@@ -4,7 +4,6 @@
 ;   Minimal helper functions for 32-bit Linux NASM programs using int 0x80.
 ;   Provides: quit, sprint, sprintLF, iprintLF, atoi
 ;
-; Assemble: nasm -f elf functions.asm -o functions.o
 
 SECTION .data
 newline db 0x0A
