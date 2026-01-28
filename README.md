@@ -22,13 +22,6 @@ during enumeration phases of security assessments.
 - `sysinfo.asm` – Main program
 - `functions.asm` – Helper routines for string and integer output
 
-## Build and Run
-```bash
-nasm -f elf sysinfo.asm
-nasm -f elf functions.asm
-ld -m elf_i386 sysinfo.o -o sysinfo
-./sysinfo
-
 ## Output Example
 === System Info (uname) ===
 sysname:  Linux
@@ -36,3 +29,12 @@ hostname: kali
 release:  6.x.x
 version:  #1 SMP
 machine:  x86_64
+
+## Build and Run
+```bash
+nasm -f elf sysinfo.asm
+nasm -f elf functions.asm
+ld -m elf_i386 sysinfo.o -o sysinfo
+./sysinfo
+
+
