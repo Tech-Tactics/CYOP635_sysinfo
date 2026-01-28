@@ -1,7 +1,7 @@
 ; functions.asm
-; Author: Joseph Black (adapted helper routines for CYOP 635 lab use)
+; Author: Joseph Black (helper routines for CYOP 635 lab use)
 ; Description:
-;   Minimal helper functions for 32-bit Linux NASM programs using int 0x80.
+;   Helper functions for 32-bit Linux NASM programs using int 0x80.
 ;   Provides: quit, sprint, sprintLF, iprintLF, atoi
 ;
 
